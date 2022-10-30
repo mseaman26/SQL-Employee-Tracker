@@ -1,5 +1,6 @@
 const inquirer = require("inquirer")
 const mysql = require("mysql2")
+const table = require("console.table")
 
 const db = mysql.createConnection(
     {
@@ -13,6 +14,7 @@ const db = mysql.createConnection(
 
 db.query("SELECT * FROM company_db", function (err, results){
     console.log(results)
+    db.end
 })
 // inquirer.prompt(
 //     [

@@ -8,5 +8,6 @@ VALUES  ("Sales Lead"),
         ("Accountant"),
         ("Legal Team Lead"),
         ("Lawer"),
+        ("party guy"),
         ("CEO");
-        
+     
