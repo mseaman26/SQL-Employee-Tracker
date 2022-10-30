@@ -26,6 +26,11 @@ inquirer.prompt(
 .then((data) =>{
     switch(data.mainMenu){
         case "View all employees":
+            db.query("SELECT * FROM employees", function (err, results){
+                console.log("")
+                console.table(results)
+                db.end
+            })
             return
         case "View all employees by department":
             return

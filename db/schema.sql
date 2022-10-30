@@ -10,11 +10,11 @@ CREATE TABLE role(
 );
 
 CREATE TABLE employees(
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     role_id INT,
-    manager_id INT NOT NULL
+    manager_id INT
 
 );
 CREATE TABLE department(
