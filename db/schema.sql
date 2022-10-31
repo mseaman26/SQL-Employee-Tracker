@@ -27,5 +27,3 @@ CREATE TABLE employees(
     FOREIGN KEY (manager_id)
     REFERENCES employees(id)
 );
--- USE company_db
--- SELECT * FROM company_db.employees

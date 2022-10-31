@@ -1,5 +1,5 @@
--- INSERT INTO employees(first_name, last_name, role_id, manager_id)
--- VALUES ("ol' gil");
+
+
 INSERT INTO department(name)
 VALUES  ("Engineering"),
         ("Finance"),
@@ -30,3 +30,11 @@ VALUES  ("Michael", "Seaman", 7, null),
         ("Keith", "Malloy", 8, 7),
         ("Joel", "Parkinson", 8, 7);
        
+-- USE company_db;
+-- SELECT first_name, last_name, role_id
+-- FROM employees 
+-- INNER JOIN role
+-- ON role.title = employees.id
+
+USE company_db;
+SELECT * FROM employees;
