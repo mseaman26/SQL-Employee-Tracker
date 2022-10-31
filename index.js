@@ -49,7 +49,75 @@ function mainMenu (){
             case "View all employees by manager":
                 return
             case "Add employee":
-                
+                inquirer.prompt(
+                    [
+                        {
+                            type: "input",
+                            name: "employeeFirstName",
+                            message: "What is the new employee's first name?"
+                        },
+                        {
+                            type: "input",
+                            name: "employeeLastName",
+                            message: "What is the new employee's last name?"
+                        },
+                        {
+                            type: "list",
+                            name: "employeeRole",
+                            message: "What is the new employee's role?",
+                            choices: ["Sales Lead", "Sales Person", "Senior Software Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawer", "CEO"]
+                        },
+                        {
+                            type: "input",
+                            name: "employeeManagerId",
+                            message: "What is the employee ID number of the new employee's manager?"
+                        }
+
+                    ]
+                )
+                .then((data) =>{
+                    let role
+                    switch(data.employeeRole){
+                        case "Sales Lead":
+                            role = 1
+                            break
+                        case "Sales Person":
+                            role = 2
+                            break
+                        case "Senior Software Engineer":
+                            role =3
+                            break
+                        case "Software Engineer":
+                            role = 4
+                            break 
+                        case "Account Manager":
+                            role = 5
+                            break
+                        case "Accountant":
+                            role = 6
+                            break
+                        case "Legal Team Lead":
+                            role = 7
+                            break
+                        case "Lawer":
+                            role = 8
+                            break
+                        case "CEO":
+                            role = 9
+                            break
+                        
+                    }
+                    console.log("getting here")
+                    db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${data.employeeFirstName}", "${data.employeeLastName}", ${role}, ${data.employeeManagerId});`, function (err, results){
+                        if(err){
+                            console.log(err)
+                        }else{
+                            console.log(`${data.employeeFirstName} ${data.employeeLastName} has been added!`)
+                            mainMenu()
+                        }
+                        
+                    })
+                })
                 return
             case "Romove employee":
                 return

@@ -29,13 +29,18 @@ VALUES  ("Michael", "Seaman", 7, null),
         ("Dane", "Reynolds", 6, 5),
         ("Keith", "Malloy", 8, 7),
         ("Joel", "Parkinson", 8, 7);
-       
-USE company_db;
-SELECT
-role.title AS title,
-role.salary AS salary,
-employees.id,
-employees.first_name,
-employees.last_name
-FROM employees
-LEFT JOIN role ON employees.role_id = role.id;
+
+
+
+-- INSERT INTO employees(first_name, last_name, role_id, manager_id)
+-- VALUES  ("john", "Doe", 3, 4);
+-- USE company_db;
+-- SELECT
+-- role.title AS title,
+-- role.salary AS salary,
+-- employees.id,
+-- employees.first_name,
+-- employees.last_name,
+-- employees.manager_id
+-- FROM employees
+-- LEFT JOIN role ON employees.role_id = role.id;
