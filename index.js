@@ -33,6 +33,10 @@ inquirer.prompt(
             })
             return
         case "View all employees by department":
+            db.query("SELECT * FROM employees ORDER BY role_id", function (err, results){
+                console.table(results)
+                db.end
+            })
             return
         case "View all employees by manager":
             return
