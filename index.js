@@ -25,29 +25,32 @@ function mainMenu (){
     )
     .then((data) =>{
         switch(data.mainMenu){
+            //VIEW ALL EMPLOYEES
             case "View all employees":
-                db.query("SELECT * FROM employees", function (err, results){
+                db.query("SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id", function (err, results){
                     console.log("")
                     console.table(results)
                     mainMenu()
                 })
-                return
+                break
+            //VIEW ALL EMPLOYEES BY DEPARTMENT TODO:
             case "View all employees by department":
                 db.query("SELECT * FROM employees ORDER BY role_id", function (err, results){
                     console.log("")
                     console.table(results)
                     mainMenu()
                 })
-                return
+                break
+            // VIEW ALL EMPLOYEES BY ROLE
             case "View all employees by role":
                 db.query("SELECT role.title AS title,role.salary AS salary,employees.id,employees.first_name,employees.last_name FROM employees RIGHT JOIN role ON employees.role_id = role.id;", function (err,results){
                     console.log("")
                     console.table(results)
                     mainMenu()
                 })
-                return
+                break
             case "View all employees by manager":
-                return
+                break
             case "Add employee":
                 inquirer.prompt(
                     [
@@ -118,44 +121,65 @@ function mainMenu (){
                         
                     })
                 })
-                return
+                break
             case "Romove employee":
-                return
+                break
             case "Update employee role":
-                return
+                break
             case "Update employee manager":
-                return
+                break
             case "View all roles":
                
-                db.query("SELECT * FROM role", function (err, results){
+                db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
                     console.log("")
                     console.table(results)
                     mainMenu()
                 })
     
-                return
+                break
             case "Add role":
-                return
+                break
             case "Remove role":
-                return
+                break
             case "View all departmemts":
-                db.query("SELECT * FROM department", function (err, results){
+                db.query("SELECT department.name AS Department, department.id AS Department_ID FROM department", function (err, results){
                     console.log("")
                     console.table(results)
                     mainMenu()
                 })
-                return
+                break
             case "Add department":
-                return
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        name: "departmentName",
+                        message: "What is the name of the department you'd like to add?"
+                    }
+                ])
+                    .then((data) =>{
+                        db.query(`INSERT INTO department(name) VALUES ("${data.departmentName}")`, function (err, results){
+                            if(err){
+                                console.log(err)
+                            }else{
+                                console.log("")
+                                console.log(`${data.departmentName} has been added to the departments!`)
+                                console.log("")
+                                mainMenu()
+                            }
+                            
+                        })
+                    })
+                
+                break
             case "Remove department":
-                return
+                break
             case "View total utilized budget by department":
-                return
+                break
             case "Quit":
                 console.log("")
                 console.log("Have a nice day")
                 console.log("Press control C to get back to terminal")
-                return
+                break
         }
     })
 }

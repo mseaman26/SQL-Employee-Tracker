@@ -19,7 +19,7 @@ VALUES  ("Sales Lead", 60000, 4),
      
 
 INSERT INTO employees(first_name, last_name, role_id, manager_id)
-VALUES  ("Michael", "Seaman", 7, null),
+VALUES  ("Michael", "Seaman", 9, null),
         ("David", "West", 1, null),
         ("Tom", "Hanks", 3, null),
         ("Gery", "Lopez", 5, null),
@@ -31,16 +31,10 @@ VALUES  ("Michael", "Seaman", 7, null),
         ("Joel", "Parkinson", 8, 7);
 
 
+-- SELECT employees.first_name, employees.last_name, employees.id FROM employees WHERE employees.manager_id IS null;
 
--- INSERT INTO employees(first_name, last_name, role_id, manager_id)
--- VALUES  ("john", "Doe", 3, 4);
--- USE company_db;
--- SELECT
--- role.title AS title,
--- role.salary AS salary,
--- employees.id,
--- employees.first_name,
--- employees.last_name,
--- employees.manager_id
--- FROM employees
--- LEFT JOIN role ON employees.role_id = role.id;
+-- SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id
+
+-- INSERT INTO department(name) VALUES("Janitorial");
+-- SELECT * FROM department;
+
