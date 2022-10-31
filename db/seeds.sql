@@ -32,10 +32,10 @@ VALUES  ("Michael", "Seaman", 7, null),
        
 USE company_db;
 SELECT
+role.title AS title,
+role.salary AS salary,
 employees.id,
 employees.first_name,
-employees.last_name,
-role.title AS title,
-role.salary AS salary
+employees.last_name
 FROM employees
-RIGHT JOIN role ON employees.role_id = role.id;
+LEFT JOIN role ON employees.role_id = role.id;
