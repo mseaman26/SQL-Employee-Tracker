@@ -30,11 +30,12 @@ VALUES  ("Michael", "Seaman", 7, null),
         ("Keith", "Malloy", 8, 7),
         ("Joel", "Parkinson", 8, 7);
        
--- USE company_db;
--- SELECT first_name, last_name, role_id
--- FROM employees 
--- INNER JOIN role
--- ON role.title = employees.id
-
 USE company_db;
-SELECT * FROM employees;
+SELECT
+employees.id,
+employees.first_name,
+employees.last_name,
+role.title AS title,
+role.salary AS salary
+FROM employees
+RIGHT JOIN role ON employees.role_id = role.id;
