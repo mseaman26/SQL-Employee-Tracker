@@ -33,6 +33,8 @@ VALUES  ("Michael", "Seaman", 9, null),
 
 -- SELECT employees.first_name, employees.last_name, employees.id FROM employees WHERE employees.manager_id IS null;
 
+-- SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary, employees.manager_id FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id
+
 SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary, employees.manager_id FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id
 
 -- INSERT INTO department(name) VALUES("Janitorial");
