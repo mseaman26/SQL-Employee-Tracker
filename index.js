@@ -28,22 +28,17 @@ function mainMenu (){
             //VIEW ALL EMPLOYEES
             case "View all employees":
                 viewAllEmployees()
+                console.log("getting here?")
+                setTimeout(mainMenu, 200)
                 break
-            //VIEW ALL EMPLOYEES BY DEPARTMENT TODO:
-            case "View all employees by department":
-                db.query("SELECT * FROM employees ORDER BY role_id", function (err, results){
-                    console.log("")
-                    console.table(results)
-                    mainMenu()
-                })
-                break
+            
             // VIEW ALL EMPLOYEES BY ROLE
             case "View all employees by role":
-                db.query("SELECT role.title AS title,role.salary AS salary,employees.id,employees.first_name,employees.last_name FROM employees RIGHT JOIN role ON employees.role_id = role.id;", function (err,results){
-                    console.log("")
-                    console.table(results)
-                    mainMenu()
-                })
+                viewAllEmployeesByRoll()
+                break
+                //VIEW ALL EMPLOYEES BY DEPARTMENT TODO:
+            case "View all employees by department":
+                viewAllEmployeesByDepartment()
                 break
             case "View all employees by manager":
                 break
@@ -54,29 +49,26 @@ function mainMenu (){
             case "Romove employee":
                 break
             case "Update employee role":
+                //I used a trick that a tutor taught me that allows me to display the employees as the first part of this functionality and have it occur before the inquirer begins.  Refer to the declaration of this function for more clarity
                 updateEmployeeRole()
 
                 break
             case "Update employee manager":
                 break
             case "View all roles":
+
+                viewAllRoles()
                
-                db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
-                    console.log("")
-                    console.table(results)
-                    mainMenu()
-                })
     
                 break
             case "Add role":
-                viewAllDepartments()
-                setTimeout(addRole, 200)
-  
+                viewAllDepartments(true)
+                
                 break
             case "Remove role":
                 break
             case "View all departmemts":
-                viewAllRoles()
+                viewAllDepartments()
                 break
             case "Add department":
                 inquirer.prompt([
@@ -113,6 +105,31 @@ function mainMenu (){
         }
     })
 }
+function viewAllEmployees(exectuteCB=false){
+    db.query("SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id", function (err, results){
+        console.log("")
+        console.table(results)
+        if(exectuteCB == true){
+            updateEmployeeRole()
+        }
+
+    })
+    
+}
+function viewAllEmployeesByRoll(){
+    db.query("SELECT role.title AS title,role.salary AS salary,employees.id,employees.first_name,employees.last_name FROM employees RIGHT JOIN role ON employees.role_id = role.id;", function (err,results){
+        console.log("")
+        console.table(results)
+        mainMenu()
+    })
+}
+function viewAllEmployeesByDepartment(){
+    db.query("SELECT * FROM employees ORDER BY role_id", function (err, results){
+        console.log("")
+        console.table(results)
+        mainMenu()
+    })
+}
 function viewAllRoles(){
     db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
         console.log("")
@@ -120,18 +137,16 @@ function viewAllRoles(){
         mainMenu()
     })
 }
-function viewAllEmployees(){
-    db.query("SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id", function (err, results){
-        console.log("")
-        console.table(results)
-        mainMenu()
-    })
-}
-function viewAllDepartments(){
+
+function viewAllDepartments(exectuteCB=false){
     db.query("SELECT department.name AS Department, department.id AS Department_ID FROM department", function (err, results){
         console.log("")
         console.table(results)
-
+        if (exectuteCB == true){
+            //TODO: explain this
+            addRole()
+        }
+        mainMenu()
     })
 }
 function addRole(){inquirer.prompt([
@@ -166,47 +181,58 @@ function addRole(){inquirer.prompt([
     })}
 function updateEmployeeRole(){
     let empID
+    let role
     viewAllEmployees()
-        inquirer.prompt([
-            {
-                type: "number",
-                name: "employeeId",
-                message: "Above is a list of employees.  Wich employee's role would you like to update?"
-            }
-          
-        ])
-        .then((data) =>{
-            empID = data.employeeId
-        })
-        .then(()=>{
+        setTimeout(() =>{
             inquirer.prompt([
                 {
                     type: "number",
-                    name: "newRole",
-                    message: "above is a list of roles.  Select the ID of the employee's new role"
+                    name: "employeeId",
+                    message: "Above is a list of employees.  Wich employee's role would you like to update?"
                 }
+              
             ])
             .then((data) =>{
-                db.query(`UPDATE employees SET role_id = ${data.newRole} WHERE id = ${empID};`, function (err, results){
-                    if(err){
-                        console.log(err)
-                    }else{
-                        console.log("")
-                        console.log(`${data.employeeFirstName} ${data.employeeLastName} has been added!`)
-                        console.log("")
-                        console.log(results)
-                        console.log("")
-                        mainMenu()
-                    }
-                    
-                })
+                empID = data.employeeId
+                viewAllRoles()
+                setTimeout(() => {
+                    inquirer.prompt([
+                        {
+                            type: "number",
+                            name: "newRole",
+                            message: "above is a list of roles.  Select the ID of the employee's new role"
+                        }
+                    ])
+                    .then((data) =>{
+                        role = data.newRole
+                        db.query(`UPDATE employees SET role_id = ${role} WHERE id = ${empID};`, function (err, results){
+                            if(err){
+                                console.log(err)
+                            }else{
+                                console.log("")
+                                console.log(`role has been updated!`)
+                                console.log("")
+                                mainMenu()
+                            }
+                            
+                        })
+                    })
+                }, 500)
             })
-        })
+            }, 200)
+
+                
+
+                
+                
+        
+        
+        
    
     
     
 }
-//TODO: make list all roles function
+
 function viewAllManagers(){
     db.query("SELECT * FROM employees WHERE manager_id IS null", function (err, results){
         console.log("")
