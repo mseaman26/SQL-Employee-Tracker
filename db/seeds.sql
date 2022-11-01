@@ -39,3 +39,5 @@ VALUES  ("Michael", "Seaman", 9, null),
 -- SELECT * FROM department;
 
 -- SELECT * FROM employees WHERE manager_id IS null
+UPDATE employees SET role_id = 8 WHERE id = 1;
+SELECT * FROM employees;

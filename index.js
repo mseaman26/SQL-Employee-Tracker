@@ -27,11 +27,7 @@ function mainMenu (){
         switch(data.mainMenu){
             //VIEW ALL EMPLOYEES
             case "View all employees":
-                db.query("SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id", function (err, results){
-                    console.log("")
-                    console.table(results)
-                    mainMenu()
-                })
+                viewAllEmployees()
                 break
             //VIEW ALL EMPLOYEES BY DEPARTMENT TODO:
             case "View all employees by department":
@@ -58,6 +54,8 @@ function mainMenu (){
             case "Romove employee":
                 break
             case "Update employee role":
+                updateEmployeeRole()
+
                 break
             case "Update employee manager":
                 break
@@ -78,11 +76,7 @@ function mainMenu (){
             case "Remove role":
                 break
             case "View all departmemts":
-                db.query("SELECT department.name AS Department, department.id AS Department_ID FROM department", function (err, results){
-                    console.log("")
-                    console.table(results)
-                    mainMenu()
-                })
+                viewAllRoles()
                 break
             case "Add department":
                 inquirer.prompt([
@@ -119,7 +113,20 @@ function mainMenu (){
         }
     })
 }
-
+function viewAllRoles(){
+    db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
+        console.log("")
+        console.table(results)
+        mainMenu()
+    })
+}
+function viewAllEmployees(){
+    db.query("SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id", function (err, results){
+        console.log("")
+        console.table(results)
+        mainMenu()
+    })
+}
 function viewAllDepartments(){
     db.query("SELECT department.name AS Department, department.id AS Department_ID FROM department", function (err, results){
         console.log("")
@@ -157,6 +164,49 @@ function addRole(){inquirer.prompt([
             
         })
     })}
+function updateEmployeeRole(){
+    let empID
+    viewAllEmployees()
+        inquirer.prompt([
+            {
+                type: "number",
+                name: "employeeId",
+                message: "Above is a list of employees.  Wich employee's role would you like to update?"
+            }
+          
+        ])
+        .then((data) =>{
+            empID = data.employeeId
+        })
+        .then(()=>{
+            inquirer.prompt([
+                {
+                    type: "number",
+                    name: "newRole",
+                    message: "above is a list of roles.  Select the ID of the employee's new role"
+                }
+            ])
+            .then((data) =>{
+                db.query(`UPDATE employees SET role_id = ${data.newRole} WHERE id = ${empID};`, function (err, results){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        console.log("")
+                        console.log(`${data.employeeFirstName} ${data.employeeLastName} has been added!`)
+                        console.log("")
+                        console.log(results)
+                        console.log("")
+                        mainMenu()
+                    }
+                    
+                })
+            })
+        })
+   
+    
+    
+}
+//TODO: make list all roles function
 function viewAllManagers(){
     db.query("SELECT * FROM employees WHERE manager_id IS null", function (err, results){
         console.log("")
