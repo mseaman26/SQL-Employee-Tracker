@@ -52,74 +52,8 @@ function mainMenu (){
             case "View all employees by manager":
                 break
             case "Add employee":
-                inquirer.prompt(
-                    [
-                        {
-                            type: "input",
-                            name: "employeeFirstName",
-                            message: "What is the new employee's first name?"
-                        },
-                        {
-                            type: "input",
-                            name: "employeeLastName",
-                            message: "What is the new employee's last name?"
-                        },
-                        {
-                            type: "list",
-                            name: "employeeRole",
-                            message: "What is the new employee's role?",
-                            choices: ["Sales Lead", "Sales Person", "Senior Software Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawer", "CEO"]
-                        },
-                        {
-                            type: "input",
-                            name: "employeeManagerId",
-                            message: "What is the employee ID number of the new employee's manager?"
-                        }
-
-                    ]
-                )
-                .then((data) =>{
-                    let role
-                    switch(data.employeeRole){
-                        case "Sales Lead":
-                            role = 1
-                            break
-                        case "Sales Person":
-                            role = 2
-                            break
-                        case "Senior Software Engineer":
-                            role =3
-                            break
-                        case "Software Engineer":
-                            role = 4
-                            break 
-                        case "Account Manager":
-                            role = 5
-                            break
-                        case "Accountant":
-                            role = 6
-                            break
-                        case "Legal Team Lead":
-                            role = 7
-                            break
-                        case "Lawer":
-                            role = 8
-                            break
-                        case "CEO":
-                            role = 9
-                            break
-                        
-                    }
-                    db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${data.employeeFirstName}", "${data.employeeLastName}", ${role}, ${data.employeeManagerId});`, function (err, results){
-                        if(err){
-                            console.log(err)
-                        }else{
-                            console.log(`${data.employeeFirstName} ${data.employeeLastName} has been added!`)
-                            mainMenu()
-                        }
-                        
-                    })
-                })
+                viewAllManagers()
+                setTimeout(addEmployee, 200)
                 break
             case "Romove employee":
                 break
@@ -138,7 +72,7 @@ function mainMenu (){
                 break
             case "Add role":
                 viewAllDepartments()
-                setTimeout(chooseManager, 200)
+                setTimeout(addRole, 200)
   
                 break
             case "Remove role":
@@ -193,8 +127,7 @@ function viewAllDepartments(){
 
     })
 }
-mainMenu()
-function chooseManager(){inquirer.prompt([
+function addRole(){inquirer.prompt([
     {
         type: "number",
         name: "roleDepartment",
@@ -224,3 +157,84 @@ function chooseManager(){inquirer.prompt([
             
         })
     })}
+function viewAllManagers(){
+    db.query("SELECT * FROM employees WHERE manager_id IS null", function (err, results){
+        console.log("")
+        console.table(results)
+
+    })
+}
+function addEmployee(){
+    inquirer.prompt(
+        [
+            {
+                type: "input",
+                name: "employeeManagerId",
+                message: "Above is a list of managers What is the employee ID number of the new employee's manager?"
+            },
+            {
+                type: "input",
+                name: "employeeFirstName",
+                message: "What is the new employee's first name?"
+            },
+            {
+                type: "input",
+                name: "employeeLastName",
+                message: "What is the new employee's last name?"
+            },
+            {
+                type: "list",
+                name: "employeeRole",
+                message: "What is the new employee's role?",
+                choices: ["Sales Lead", "Sales Person", "Senior Software Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawer", "CEO"]
+            }
+           
+
+        ]
+    )
+    .then((data) =>{
+        let role
+        switch(data.employeeRole){
+            case "Sales Lead":
+                role = 1
+                break
+            case "Sales Person":
+                role = 2
+                break
+            case "Senior Software Engineer":
+                role =3
+                break
+            case "Software Engineer":
+                role = 4
+                break 
+            case "Account Manager":
+                role = 5
+                break
+            case "Accountant":
+                role = 6
+                break
+            case "Legal Team Lead":
+                role = 7
+                break
+            case "Lawer":
+                role = 8
+                break
+            case "CEO":
+                role = 9
+                break
+            
+        }
+        db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${data.employeeFirstName}", "${data.employeeLastName}", ${role}, ${data.employeeManagerId});`, function (err, results){
+            if(err){
+                console.log(err)
+            }else{
+                console.log("")
+                console.log(`${data.employeeFirstName} ${data.employeeLastName} has been added!`)
+                console.log("")
+                mainMenu()
+            }
+            
+        })
+    })
+}
+mainMenu()

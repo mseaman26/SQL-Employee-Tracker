@@ -38,3 +38,4 @@ VALUES  ("Michael", "Seaman", 9, null),
 -- INSERT INTO department(name) VALUES("Janitorial");
 -- SELECT * FROM department;
 
+-- SELECT * FROM employees WHERE manager_id IS null
