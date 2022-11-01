@@ -110,7 +110,6 @@ function mainMenu (){
                             break
                         
                     }
-                    console.log("getting here")
                     db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${data.employeeFirstName}", "${data.employeeLastName}", ${role}, ${data.employeeManagerId});`, function (err, results){
                         if(err){
                             console.log(err)
@@ -130,7 +129,7 @@ function mainMenu (){
                 break
             case "View all roles":
                
-                db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
+                db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
                     console.log("")
                     console.table(results)
                     mainMenu()
@@ -138,6 +137,9 @@ function mainMenu (){
     
                 break
             case "Add role":
+                viewAllDepartments()
+                setTimeout(chooseManager, 200)
+  
                 break
             case "Remove role":
                 break
@@ -183,4 +185,42 @@ function mainMenu (){
         }
     })
 }
+
+function viewAllDepartments(){
+    db.query("SELECT department.name AS Department, department.id AS Department_ID FROM department", function (err, results){
+        console.log("")
+        console.table(results)
+
+    })
+}
 mainMenu()
+function chooseManager(){inquirer.prompt([
+    {
+        type: "number",
+        name: "roleDepartment",
+        message: "Above is a list of current departments.  Which one would you like to add a role to? (enter number)"
+    },
+    {
+        type: "input",
+        name: "roleName",
+        message: "What is the name of the role you'd like to add?"
+    },
+    {
+        type: "number",
+        name: "roleSalary",
+        message: "What salary will you attribute to this role? (enter number, no commas)"
+    }
+])
+    .then((data) =>{
+        db.query(`INSERT INTO role(title, salary, department_id) VALUES ("${data.roleName}", ${data.roleSalary}, ${data.roleDepartment})`, function (err, results){
+            if(err){
+                console.log(err)
+            }else{
+                console.log("")
+                console.log(`${data.roleName} has been added!`)
+                console.log("")
+                mainMenu()
+            }
+            
+        })
+    })}
