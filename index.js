@@ -69,6 +69,7 @@ function mainMenu (){
                 break
             case "View all departmemts":
                 viewAllDepartments()
+                mainMenu()
                 break
             case "Add department":
                 inquirer.prompt([
@@ -146,39 +147,40 @@ function viewAllDepartments(exectuteCB=false){
             //TODO: explain this
             addRole()
         }
-        mainMenu()
+        
     })
 }
-function addRole(){inquirer.prompt([
-    {
-        type: "number",
-        name: "roleDepartment",
-        message: "Above is a list of current departments.  Which one would you like to add a role to? (enter number)"
-    },
-    {
-        type: "input",
-        name: "roleName",
-        message: "What is the name of the role you'd like to add?"
-    },
-    {
-        type: "number",
-        name: "roleSalary",
-        message: "What salary will you attribute to this role? (enter number, no commas)"
-    }
-])
-    .then((data) =>{
-        db.query(`INSERT INTO role(title, salary, department_id) VALUES ("${data.roleName}", ${data.roleSalary}, ${data.roleDepartment})`, function (err, results){
-            if(err){
-                console.log(err)
-            }else{
-                console.log("")
-                console.log(`${data.roleName} has been added!`)
-                console.log("")
-                mainMenu()
-            }
-            
-        })
-    })}
+function addRole()
+    {inquirer.prompt([
+        {
+            type: "number",
+            name: "roleDepartment",
+            message: "Above is a list of current departments.  Which one would you like to add a role to? (enter number)"
+        },
+        {
+            type: "input",
+            name: "roleName",
+            message: "What is the name of the role you'd like to add?"
+        },
+        {
+            type: "number",
+            name: "roleSalary",
+            message: "What salary will you attribute to this role? (enter number, no commas)"
+        }
+    ])
+        .then((data) =>{
+            db.query(`INSERT INTO role(title, salary, department_id) VALUES ("${data.roleName}", ${data.roleSalary}, ${data.roleDepartment})`, function (err, results){
+                if(err){
+                    console.log(err)
+                }else{
+                    console.log("")
+                    console.log(`${data.roleName} has been added!`)
+                    console.log("")
+                    mainMenu()
+                }
+                
+            })
+        })}
 function updateEmployeeRole(){
     let empID
     let role
