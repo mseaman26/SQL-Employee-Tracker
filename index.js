@@ -46,19 +46,28 @@ function mainMenu (){
                 viewAllManagers()
                 setTimeout(addEmployee, 200)
                 break
+                //TODO:
             case "Romove employee":
+                console.log("")
+                console.log("Sorry, that functionality hasn't been built yet")
+                console.log("")
+                mainMenu()
                 break
             case "Update employee role":
-                //I used a trick that a tutor taught me that allows me to display the employees as the first part of this functionality and have it occur before the inquirer begins.  Refer to the declaration of this function for more clarity
+                
                 updateEmployeeRole()
 
                 break
             case "Update employee manager":
+                console.log("")
+                console.log("Sorry, that functionality hasn't been built yet")
+                console.log("")
+                mainMenu()
                 break
             case "View all roles":
-
-                viewAllRoles()
-                mainMenu()
+                //TODO: eplain this
+                viewAllRoles(true)
+               
     
                 break
             case "Add role":
@@ -69,7 +78,8 @@ function mainMenu (){
                 break
             case "View all departmemts":
                 viewAllDepartments()
-                mainMenu()
+                setTimeout(mainMenu, 200)
+                
                 break
             case "Add department":
                 inquirer.prompt([
@@ -131,11 +141,13 @@ function viewAllEmployeesByDepartment(){
         mainMenu()
     })
 }
-function viewAllRoles(){
+function viewAllRoles(exectuteCB=false){
     db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
         console.log("")
         console.table(results)
-
+        if(exectuteCB == true){
+            mainMenu()
+        }
     })
 }
 
@@ -143,6 +155,7 @@ function viewAllDepartments(exectuteCB=false){
     db.query("SELECT department.name AS Department, department.id AS Department_ID FROM department", function (err, results){
         console.log("")
         console.table(results)
+        console.log("")
         if (exectuteCB == true){
             //TODO: explain this
             addRole()
@@ -190,7 +203,7 @@ function updateEmployeeRole(){
                 {
                     type: "number",
                     name: "employeeId",
-                    message: "Above is a list of employees.  Which employee's role would you like to update?"
+                    message: "Above is a list of employees.  Which employee's role would you like to update? (Enter the ID number only)"
                 }
               
             ])
@@ -219,20 +232,9 @@ function updateEmployeeRole(){
                             
                         })
                     })
-                }, 200)
+                }, 400)
             })
             }, 200)
-
-                
-
-                
-                
-        
-        
-        
-   
-    
-    
 }
 
 function viewAllManagers(){
@@ -248,7 +250,7 @@ function addEmployee(){
             {
                 type: "input",
                 name: "employeeManagerId",
-                message: "Above is a list of managers What is the employee ID number of the new employee's manager?"
+                message: "Above is a list of managers. What is the employee ID number of the new employee's manager?"
             },
             {
                 type: "input",
