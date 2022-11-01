@@ -20,10 +20,10 @@ VALUES  ("Sales Lead", 60000, 4),
 
 INSERT INTO employees(first_name, last_name, role_id, manager_id)
 VALUES  ("Michael", "Seaman", 9, null),
-        ("David", "West", 1, null),
-        ("Tom", "Hanks", 3, null),
-        ("Gery", "Lopez", 5, null),
-        ("Stirling", "Spencer", 7, null),
+        ("David", "West", 1, 1),
+        ("Tom", "Hanks", 3, 1),
+        ("Gery", "Lopez", 5, 1),
+        ("Stirling", "Spencer", 7, 1),
         ("Mick", "Fanning", 2, 1),
         ("Jordy", "Smith", 4, 3),
         ("Dane", "Reynolds", 6, 5),
@@ -35,7 +35,20 @@ VALUES  ("Michael", "Seaman", 9, null),
 
 -- SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary, employees.manager_id FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id
 
-SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary, employees.manager_id FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id
+-- SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary, employees.manager_id FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id
+
+ SELECT
+    employees.id,
+    employees.first_name,
+    employees.last_name,
+    role.title AS title,
+    role.salary AS salary,
+    department.name,
+    CONCAT (manager.first_name, " ", manager.last_name) AS manager
+    FROM employees
+    LEFT JOIN role ON employees.role_id = role.id
+    LEFT JOIN department ON role.department_id = department.id
+    LEFT JOIN employees manager ON employees.manager_id = manager.id
 
 -- INSERT INTO department(name) VALUES("Janitorial");
 -- SELECT * FROM department;

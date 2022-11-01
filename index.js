@@ -58,7 +58,7 @@ function mainMenu (){
             case "View all roles":
 
                 viewAllRoles()
-               
+                mainMenu()
     
                 break
             case "Add role":
@@ -106,7 +106,7 @@ function mainMenu (){
     })
 }
 function viewAllEmployees(exectuteCB=false){
-    db.query("SELECT employees.first_name, employees.last_name, employees.id, role.title AS Job_Title, department.name AS Department, role.salary FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id", function (err, results){
+    db.query(`SELECT employees.id, employees.first_name, employees.last_name, role.title AS title, role.salary AS salary, department.name, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employees manager ON employees.manager_id = manager.id`, function (err, results){
         console.log("")
         console.table(results)
         if(exectuteCB == true){
@@ -134,7 +134,7 @@ function viewAllRoles(){
     db.query("SELECT role.title AS Job_Title, role.id AS Role_ID, department.name AS Department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.id", function (err, results){
         console.log("")
         console.table(results)
-        mainMenu()
+
     })
 }
 
@@ -188,7 +188,7 @@ function updateEmployeeRole(){
                 {
                     type: "number",
                     name: "employeeId",
-                    message: "Above is a list of employees.  Wich employee's role would you like to update?"
+                    message: "Above is a list of employees.  Which employee's role would you like to update?"
                 }
               
             ])
@@ -217,7 +217,7 @@ function updateEmployeeRole(){
                             
                         })
                     })
-                }, 500)
+                }, 200)
             })
             }, 200)
 
