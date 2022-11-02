@@ -1,4 +1,4 @@
-synchrony # Express Note Taker
+
   ## Description
 
    This app allows the user to manage a database of employees.  It begins with the database already populated with seeded data.  The employees have various properties, including; name, id, role, department, manager and salary. The user can perform various actions to modify this database. The user selects these actions from a main menu. These functions include; show all employees, view all employees by roll, add employee, update employee role, view all roles, add role, view all departments, and add department. After any of these actions is completed, the user is taken back to the main menu
