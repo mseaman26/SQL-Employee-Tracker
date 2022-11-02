@@ -31,3 +31,4 @@ VALUES  ("Michael", "Seaman", 9, null),
         ("Joel", "Parkinson", 8, 7);
 
 
+INSERT INTO role Values ("hello")

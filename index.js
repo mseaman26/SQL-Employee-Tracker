@@ -113,8 +113,7 @@ function mainMenu (){
             case "Quit":
                 console.log("")
                 console.log("Have a nice day")
-                console.log("Press control C to get back to terminal")
-                console.log("Have a nice day")
+                process.exit()
                 break
         }
     })

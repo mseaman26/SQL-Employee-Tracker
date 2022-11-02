@@ -7,7 +7,7 @@ synchrony # Express Note Taker
 
 
   ## Link to a Demo Video of the Application
-
+   https://youtu.be/zLVQHoDLSqM
 
   ## Table of Contents
 
