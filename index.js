@@ -35,7 +35,6 @@ function mainMenu (){
                 //I used setTimeout several times within this program to deal with synchrony issues.  I wanted the employees to be displayed BEFORE main menu is displayed
                 setTimeout(mainMenu, 200)
                 break
-            
             // VIEW ALL EMPLOYEES BY ROLE
             case "View all employees by role":
                 viewAllEmployeesByRoll()
@@ -44,7 +43,7 @@ function mainMenu (){
             case "View all employees by department":
                 viewAllEmployeesByDepartment()
                 break
-                //TODO:
+                //TODO:bonus
             case "View all employees by manager":
                 break
                 //ADD EMPLOYEE
@@ -52,7 +51,7 @@ function mainMenu (){
                 viewAllManagers()
                 setTimeout(addEmployee, 200)
                 break
-                //TODO:
+                //TODO: bonus
             case "Romove employee":
                 console.log("")
                 console.log("Sorry, that functionality hasn't been built yet")
@@ -60,12 +59,10 @@ function mainMenu (){
                 mainMenu()
                 break
                 //UPDATE EMPLOYEE ROLE
-            case "Update employee role":
-                
+            case "Update employee role": 
                 updateEmployeeRole()
-
                 break
-                //TODO:
+                //TODO: bonus
             case "Update employee manager":
                 console.log("")
                 console.log("Sorry, that functionality hasn't been built yet")
@@ -80,7 +77,7 @@ function mainMenu (){
             case "Add role":
                 viewAllDepartments(true)
                 break
-                //TODO:
+                //TODO: bonus
             case "Remove role":
                 console.log("")
                 console.log("Sorry, that functionality hasn't been built yet")
@@ -96,14 +93,14 @@ function mainMenu (){
             case "Add department":
                 addDepartment()
                 break
-                //TODO:
+                //TODO: bonus
             case "Remove department":
                 console.log("")
                 console.log("Sorry, that functionality hasn't been built yet")
                 console.log("")
                 mainMenu()
                 break
-                //TODO:
+                //TODO: bonus
             case "View total utilized budget by department":
                 console.log("")
                 console.log("Sorry, that functionality hasn't been built yet")
@@ -165,7 +162,6 @@ function viewAllDepartments(exectuteCB=false){
             //this feature is here because I want to view all departments within another function, but I don't want it to return to the main menu.  This was a work-around that prevented me from having to write a new function
             addRole()
         }
-        
     })
 }
 function addDepartment(){
@@ -188,7 +184,6 @@ function addDepartment(){
                     console.log("")
                     mainMenu()
                 }
-                
             })
         })
 }
@@ -222,7 +217,6 @@ function addRole()
                     console.log("")
                     mainMenu()
                 }
-                
             })
         })}
 function updateEmployeeRole(){
@@ -260,21 +254,18 @@ function updateEmployeeRole(){
                                 console.log(`role has been updated!`)
                                 console.log("")
                                 mainMenu()
-                            }
-                            
+                            }  
                         })
                     })
                 }, 400)
             })
             }, 200)
 }
-
 function viewAllManagers(){
     //Show all employees that have a manager_id of null, meaning that they are a manager, and report to nobody
     db.query("SELECT * FROM employees WHERE manager_id IS null", function (err, results){
         console.log("")
         console.table(results)
-
     })
 }
 function addEmployee(){
@@ -302,8 +293,6 @@ function addEmployee(){
                 message: "What is the new employee's role?",
                 choices: ["Sales Lead", "Sales Person", "Senior Software Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawer", "CEO"]
             }
-           
-
         ]
     )
     .then((data) =>{
@@ -337,7 +326,6 @@ function addEmployee(){
             case "CEO":
                 role = 9
                 break
-            
         }
         db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("${data.employeeFirstName}", "${data.employeeLastName}", ${role}, ${data.employeeManagerId});`, function (err, results){
             if(err){
@@ -347,8 +335,7 @@ function addEmployee(){
                 console.log(`${data.employeeFirstName} ${data.employeeLastName} has been added!`)
                 console.log("")
                 mainMenu()
-            }
-            
+            }          
         })
     })
 }
