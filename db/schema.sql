@@ -15,7 +15,7 @@ CREATE TABLE role(
     FOREIGN KEY (department_id)
     REFERENCES department(id)
 );
-
+-- I named this table "employees" which is against convention, it should have been "employee".  I didn't want to update it throughout my code, so I left it
 CREATE TABLE employees(
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30),
