@@ -127,9 +127,7 @@ function viewAllEmployees(exectuteCB=false){
         if(exectuteCB == true){
             updateEmployeeRole()
         }
-
     })
-    
 }
 function viewAllEmployeesByRoll(){
     //A simple SELECT command in a db.query, then return to main menu

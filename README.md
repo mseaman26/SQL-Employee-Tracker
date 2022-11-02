@@ -1,110 +1,107 @@
-# Express Note Taker
+synchrony # Express Note Taker
   ## Description
 
-   This app allows the user to manage a database of employees.  It begins with the database populated with seeded data already.  The employess have various properties, includeing name, role, department, salary, The user can perform various functions to modify this database. These functions include
+   This app allows the user to manage a database of employees.  It begins with the database already populated with seeded data.  The employees have various properties, including; name, id, role, department, manager and salary. The user can perform various actions to modify this database. The user selects these actions from a main menu. These functions include; show all employees, view all employees by roll, add employee, update employee role, view all roles, add role, view all departments, and add department. After any of these actions is completed, the user is taken back to the main menu
 
   [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-  ##  Link to the Deployed Application:
-  https://mikes-express-note-taker.herokuapp.com/
 
-  ## Demo of the Application on Heroku
-   <img src="Assets/Note Taker.gif">
+  ## Link to a Demo Video of the Application
+
 
   ## Table of Contents
 
  
   * [Technologies Used](#technologies-used)
+  * [Notable Features](#notable-features)
   * [Notable Methods](#notable-methods)
   * [Code Snippets](#code-snippets)
   * [Installation](#installation)<br />
-  * [Usage](#usage)<br />
   * [Contributing to This Repository](#how-to-contribute-to-this-repository)<br />
   * [Tests](#to-run-tests-run-the-following-command)<br />
   * [Questions](#questions)<br />
 
   ## Technologies Used
+  - SQL and MYSQL shell
   - Javascript
   - Node.JS
-  - Express.JS
-  - Generate-Unique-Id npm package
+  - inquirer
+ 
+  
+  ## Notable Features
+  - User can add and change the data stored in the SQL database
+  - Program runs indefinitely, allowing the user to perform as many actions as they want
 
   ## Notable Methods
-  - Using server-side code with Express.JS
-  - writing multiple routes in the server to handle different user activity
-  - Connecting server-side code with front end code
+  - Creating and using databases and tables in SQL
+  - Creating a connection to the .sql files with MYSQL and performing queries to manipulate the data in those files
+  - Populating the SQL tables with a seed file
+  - Using "JOIN" methods to create custom tables with SQL data
+  - Utilizing the setTimeout function to work around synchrony issues with inquirer
 
-  ## Code Snippets
-  Here is the rouse to handle post requests when the user adds a new note:
-  ```javascript
-app.post("/api/notes", (req, res) => {
-    let updatedNotes
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-        } else {
-          const parsedNotes = JSON.parse(data)
-          req.body.id = generateUniqueID({length: 4})
-          parsedNotes.push(req.body)
-          updatedNotes = parsedNotes
-          fs.writeFile(
-            './db/db.json',
-            JSON.stringify(parsedNotes, null, 4),
-            (err) =>
-              err
-                ? console.error(err)
-                : console.info('Successfully updated Notes!')
-          );
-          console.log(updatedNotes)
-          db = updatedNotes
-          res.json(req.body)
 
-        }
-      }) 
-})
-
-```
-Here is the delte route.  The hardest part of the project:
+ ## Code Snippets
+ Here we have en example of nesting setTimeout functionality in order to deal with the timing issues of inquirer.  I wanted certain tables to be displayed above certain questions to allow the user to see the options that they are choosing from.  I would probably go with a list prompt next time and populate the choices with string literals
 ```javascript
-app.delete("/api/notes/:id", (req, res) =>{
-    //notes file is read in
-    fs.readFile('./db/db.json', "utf8", (err, data) => {
-        if(err){
-            console.log(err)
-        }else{
-          //file is parsed
-            let parsedNotes = JSON.parse(data)
-            console.log(req.params.id)
-            //looking for the note with the matching id so we can delete the right one
-            for(let i = 0; i < parsedNotes.length; i++){
-                let noteId = req.params.id
-                if(req.params.id == parsedNotes[i].id){
-                    //using the splice method to remove the note from the array
-                    parsedNotes.splice(i,1)
-                    console.log("item deleted")
-                    db = parsedNotes
-                    //re-writing the file
-                    fs.writeFile("./db/db.json", JSON.stringify(parsedNotes, null, 4), (err) =>{
-                        err ? console.log(err): console.info("successfully updated Notes!")
-                    });
-                    console.log(noteId)
-                    //just the darndest
-                    res.send(noteId)
+function updateEmployeeRole(){
+    let empID
+    let role
+    viewAllEmployees()
+        setTimeout(() =>{
+            inquirer.prompt([
+                {
+                    type: "number",
+                    name: "employeeId",
+                    message: "Above is a list of employees.  Which employee's role would you like to update? (Enter the ID number only)"
                 }
-            }        
-        }          
-    })    
-})
+              
+            ])
+            .then((data) =>{
+                empID = data.employeeId
+                viewAllRoles()
+                setTimeout(() => {
+                    inquirer.prompt([
+                        {
+                            type: "number",
+                            name: "newRole",
+                            message: "above is a list of roles.  Select the ID of the employee's new role"
+                        }
+                    ])
+                    .then((data) =>{
+                        role = data.newRole
+                        db.query(`UPDATE employees SET role_id = ${role} WHERE id = ${empID};`, function (err, results){
+                            if(err){
+                                console.log(err)
+                            }else{
+                                console.log("")
+                                console.log(`role has been updated!`)
+                                console.log("")
+                                mainMenu()
+                            }
+                            
+                        })
+                    })
+                }, 400)
+            })
+            }, 200)
+}
+```
+Here we have a complex database query involving multiple JOINs and aliases.  This was the hardest part of the project
+```javascript
+function viewAllEmployees(exectuteCB=false){
+    db.query(`SELECT employees.id, employees.first_name, employees.last_name, role.title AS title, role.salary AS salary, department.name AS department, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employees manager ON employees.manager_id = manager.id`, function (err, results){
+        console.log("")
+        console.table(results)
+        if(exectuteCB == true){
+            updateEmployeeRole()
+        }
+    })
+}
 ```
  ## Installation
 
-    To install the necessary dependancies, run the following command:
+   To install this program, navigate to the root folder in your terminal.  Then run the command: npm init, followed by the command: npm install. Then navigate into the "db" folder and sign into mysql shell with the command: mysql -u root -p.  Then, to populate the data tables, run the command: source schema.sql, followed by the command: source seeds.sql. Then navigate back to the root folder and run node index.js and the program should begin in the terminal!
 
-      npm install
-
-  ## Usage
-
-    Clone it into a local directory, install,  and run the server.js file in node and open the link displayed in the terminal
     
   ## How to Contribute to This Repository:
 
@@ -120,6 +117,8 @@ app.delete("/api/notes/:id", (req, res) =>{
   <a href="MSeaman26@gmail.com">MSeaman26@gmail.com</a>.  
   To see more of my work, please visit:
   <a href="https://github.com/MSeaman26">My Github Page</a>
+
+
 
 
 
